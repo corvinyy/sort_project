@@ -16,8 +16,10 @@ public class Principal_NanoS {
         692, 993, 183, 553, 846, 24, 954, 286, 647, 129
     };
 
-    ////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////
+    // FORMULA SELECTION SORT
+    
     public static int[] selectionSort(int[] array) {
         int n = array.length;
         for (int i = 0; i < n - 1; i++) {
@@ -35,108 +37,91 @@ public class Principal_NanoS {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+    // FORMULA MEDIR O TEMPO EM NANO SEGUNDOS
+    
+    public static long medirTempo(Runnable metodo, int repeticoes) {
+        long soma = 0;
+        for (int i = 0; i < repeticoes; i++) {
+            long inicio = System.nanoTime();
+            metodo.run();
+            long fim = System.nanoTime();
+            soma += (fim - inicio);
+        }
+        return soma / repeticoes;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // PIOR CASO
 
     public static void mostrarPiorCaso() {
-        int[] listaCopia = lista.clone();    
-        Arrays.sort(listaCopia);               
+        int[] listaCopia = lista.clone();
+        Arrays.sort(listaCopia);
         int[] listaDcrsc = new int[listaCopia.length];
-    
-        for (int i = 0; i < listaCopia.length; i++) {                          
+
+        for (int i = 0; i < listaCopia.length; i++) {
             listaDcrsc[i] = listaCopia[listaCopia.length - 1 - i];
         }
-    
-        StringBuilder listaDcrsc_2 = new StringBuilder();
-        for (int i = 0; i < listaDcrsc.length; i++) {
-            listaDcrsc_2.append(listaDcrsc[i]).append(" ");
-             
-            if ((i + 1) % 20 == 0) {              
-                listaDcrsc_2.append("\n");
-            }
-        }
-    
-        long tempoI = System.nanoTime();  
-        int[] listaOrd = selectionSort(listaDcrsc);  
-        long tempoF = System.nanoTime();
-    
-        StringBuilder listaOrd_2 = new StringBuilder();
-        for (int i = 0; i < listaOrd.length; i++) {
-            listaOrd_2.append(listaOrd[i]).append(" ");
-            
-            if ((i + 1) % 20 == 0) {          
-                listaOrd_2.append("\n");
-            }
-        }
-    
-        JOptionPane.showMessageDialog(null, "Lista decrescente (pior caso):\n" + listaDcrsc_2 +
-                "\n\nLista ordenada (com selection sort):\n" + listaOrd_2 +
-                "\n\nTempo de execução: " + (tempoF - tempoI) + " ns");
+
+        long tempoMedio = medirTempo(() -> selectionSort(listaDcrsc.clone()), 10);
+
+        JOptionPane.showMessageDialog(null, "Lista decrescente (pior caso):\n" + formatarLista(listaDcrsc) +
+                "\n\nLista ordenada (com selection sort):\n" + formatarLista(selectionSort(listaDcrsc.clone())) +
+                "\n\nTempo médio de execução: " + tempoMedio + " ns");
     }
-    
+
+
     ////////////////////////////////////////////////////////////////////////////
+    // MEDIO CASO
 
     public static void mostrarMedioCaso() {
-        StringBuilder original = new StringBuilder();
-        for (int i = 0; i < lista.length; i++) {
-            original.append(lista[i]).append(" ");
-            
-            if ((i + 1) % 20 == 0) {        
-                original.append("\n");
-            }
-        }
-    
-        long tempoI = System.nanoTime();   
-        int[] listaOrd = selectionSort(lista.clone()); 
-        long tempoF = System.nanoTime();
-    
-        StringBuilder ordenada = new StringBuilder();
-        for (int i = 0; i < listaOrd.length; i++) {
-            ordenada.append(listaOrd[i]).append(" ");
-            
-            if ((i + 1) % 20 == 0) {    
-                ordenada.append("\n");
-            }
-        }
-    
-        JOptionPane.showMessageDialog(null, "Lista original (médio caso):\n" + original +
-                "\n\nLista ordenada (com selection sort):\n" + ordenada +
-                "\n\nTempo de execução: " + (tempoF - tempoI) + " ns");
+        long tempoMedio = medirTempo(() -> selectionSort(lista.clone()), 10);
+
+        JOptionPane.showMessageDialog(null, "Lista original (médio caso):\n" + formatarLista(lista) +
+                "\n\nLista ordenada (com selection sort):\n" + formatarLista(selectionSort(lista.clone())) +
+                "\n\nTempo médio de execução: " + tempoMedio + " ns");
     }
 
-    ////////////////////////////////////////////////////////////////////////////
 
-    public static void mostrarMelhorCaso() { 
-        int[] listaCopia = lista.clone();  
-        Arrays.sort(listaCopia); 
-    
-        StringBuilder listaCrsc = new StringBuilder();
-        for (int i = 0; i < listaCopia.length; i++) {
-            listaCrsc.append(listaCopia[i]).append(" ");
-            
-            if ((i + 1) % 20 == 0) {  
-                listaCrsc.append("\n");
-            }
-        }
-    
-        long tempoI = System.nanoTime();     
-        int[] listaOrd = selectionSort(listaCopia);
-        long tempoF = System.nanoTime();
-    
-        StringBuilder listaOrd_2 = new StringBuilder();
-        for (int i = 0; i < listaOrd.length; i++) {
-            listaOrd_2.append(listaOrd[i]).append(" ");
-            
-            if ((i + 1) % 20 == 0) {  
-                listaOrd_2.append("\n");
-            }
-        }
-    
-        JOptionPane.showMessageDialog(null, "Lista crescente (melhor caso):\n" + listaCrsc +
-                "\n\nLista ordenada (com selection sort):\n" + listaOrd_2 +
-                "\n\nTempo de execução: " + (tempoF - tempoI) + " ns");
+    ////////////////////////////////////////////////////////////////////////////
+    // MELHOR CASO
+
+    public static void mostrarMelhorCaso() {
+        int[] listaCopia = lista.clone();
+        Arrays.sort(listaCopia);
+
+        long tempoMedio = medirTempo(() -> selectionSort(listaCopia.clone()), 10);
+
+        JOptionPane.showMessageDialog(null, "Lista crescente (melhor caso):\n" + formatarLista(listaCopia) +
+                "\n\nLista ordenada (com selection sort):\n" + formatarLista(selectionSort(listaCopia.clone())) +
+                "\n\nTempo médio de execução: " + tempoMedio + " ns");
     }
 
-    ////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////
+    // FORMATA LISTA PARA EXIBIÇÃO
+    public static String formatarLista(int[] array) {
+        StringBuilder sb = new StringBuilder();
+        int contador = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            sb.append(array[i]);
+            contador++;
+
+            if (contador == 20) { // Quebra de linha a cada 20 elementos
+                sb.append("\n");
+                contador = 0;
+            } else if (i != array.length - 1) {
+                sb.append(", ");
+            }
+        }
+
+        return sb.toString();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // MENU
     public static void mostraOpcoes() {
         String opcao = JOptionPane.showInputDialog("Digite um número para ordenar a lista: \n" +
                 "1 - Pior caso\n" +
@@ -158,10 +143,10 @@ public class Principal_NanoS {
 
         } else if (opcao.equals("4")) {
             JOptionPane.showMessageDialog(null, "Saindo...");
-            
         } else {
             JOptionPane.showMessageDialog(null, "Opção inválida!");
             mostraOpcoes();
         }
     }
+
 }
